@@ -2,6 +2,21 @@
 
 Spring Boot backend for a finance dashboard system with role-based access control, financial record management, and dashboard summary APIs.
 
+## Important Notes
+
+- For better experience, start the application first and then open Swagger UI at `http://localhost:8080/swagger-ui.html`
+- Click the `Authorize` button before testing secured endpoints
+- There are 3 default users with seeded credentials:
+
+  - Admin: `admin@zorvyn.io` / `Admin@123`
+  - Analyst: `analyst@zorvyn.io` / `Analyst@123`
+  - Viewer: `viewer@zorvyn.io` / `Viewer@123`
+
+- Additional users can be created through the admin APIs.
+- Admin users can create other admins, analysts, or viewers.
+- The application includes a default seeded admin account for initial access. If you want to change the default seeded admin credentials, update the seed data configuration in the codebase and restart the application. Additional admin users can also be created later through the admin APIs.
+
+
 ## Tech Stack
 
 - Java 21

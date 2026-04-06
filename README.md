@@ -1,75 +1,143 @@
-# Zorvyn
-A finance dashboard system where different users interact with financial records based on their role.
+# Finance Dashboard Backend
 
-# Core Features -
+Spring Boot backend for a finance dashboard system with role-based access control, financial record management, and dashboard summary APIs.
 
-1. User & Role Management
-Create and manage users
-Assign roles to users
-Maintain user status (active / inactive)
-Enforce role-based restrictions
+## Tech Stack
 
-Roles (suggested):
+- Java 21
+- Spring Boot 3
+- Spring Web
+- Spring Data JPA
+- Spring Security
+- Spring Validation
+- MySQL
+- Lombok
+- springdoc OpenAPI / Swagger UI
 
-Viewer → read-only access
-Analyst → read + analytics
-Admin → full access (users + records)
+## Implemented Features
 
-2. Financial Records Management
-Each record should support:
-amount
-type (income / expense)
-category
-date
-notes / description
+- User and role management
+- Financial records CRUD
+- Record filtering by type, category, date range, and user
+- Pagination and sorting for record listing
+- Dashboard summary APIs
+- Role-based access control
+- Validation and centralized error handling
+- MySQL persistence
+- Swagger API documentation
+- Integration tests
 
-Operations required:
+## Roles
 
-Create records
-Read records
-Update records
-Delete records
-Filter records:
-by date range
-by category
-by type
+- `ADMIN`: manage users and financial records
+- `ANALYST`: read records and access dashboard summaries
+- `VIEWER`: access dashboard summaries only
 
-3. Dashboard Summary APIs
-Provide aggregated data endpoints:
-Total income
-Total expenses
-Net balance
-Category-wise totals
-Recent transactions
-Time-based trends:
-monthly
-weekly
+## Default Users
 
-4. Access Control (RBAC)
-Enforce permissions based on roles
-Examples:
-Viewer → cannot modify anything
-Analyst → read + analytics only
-Admin → full CRUD + user management
-Implement via:
-middleware / filters / guards (Spring Security)
+- Admin: `admin@zorvyn.io` / `Admin@123`
+- Analyst: `analyst@zorvyn.io` / `Analyst@123`
+- Viewer: `viewer@zorvyn.io` / `Viewer@123`
 
-5. Validation & Error Handling
-Input validation (fields, formats, required values)
-Proper HTTP status codes:
-400 → bad request
-401 → unauthorized
-403 → forbidden
-404 → not found
-Meaningful error messages
-Prevent invalid operations
+## Database Setup
 
-6. Data Persistence
-Use a database (MySQL is fine)
-Store:
-users
-roles
-financial records
-Support efficient queries for:
-filtering
-aggregations
+Create the database:
+
+```sql
+CREATE DATABASE finance_dashboard;
+```
+
+Default datasource configuration is in `src/main/resources/application.properties`.
+
+## Running the Project
+
+1. Make sure MySQL is running.
+2. Create the `finance_dashboard` database.
+3. Update datasource credentials in `src/main/resources/application.properties` if needed.
+4. Start the application:
+
+```bash
+mvn spring-boot:run
+```
+
+Application base URL:
+
+```text
+http://localhost:8080
+```
+
+Swagger UI:
+
+```text
+http://localhost:8080/swagger-ui.html
+```
+
+Postman collection:
+
+```text
+Finance-Dashboard-API.postman_collection.json
+```
+
+## Authentication
+
+The API uses HTTP Basic authentication with Spring Security.
+
+In Swagger UI:
+
+1. Click `Authorize`
+2. Enter a valid email and password
+3. Call the secured endpoints based on the user role
+
+## Main API Endpoints
+
+### Users
+
+- `POST /api/users`
+- `GET /api/users`
+- `GET /api/users/{id}`
+- `PATCH /api/users/{id}/role`
+- `PATCH /api/users/{id}/status`
+
+### Financial Records
+
+- `POST /api/records`
+- `GET /api/records`
+- `GET /api/records/{id}`
+- `PUT /api/records/{id}`
+- `DELETE /api/records/{id}`
+
+### Dashboard
+
+- `GET /api/dashboard/summary`
+
+## Sample Filters
+
+- `GET /api/records?type=INCOME`
+- `GET /api/records?category=Cloud`
+- `GET /api/records?startDate=2026-04-01&endDate=2026-04-30`
+- `GET /api/records?page=0&size=5`
+- `GET /api/records?sortBy=amount&direction=ASC`
+
+## Dashboard Summary Response Includes
+
+- total income
+- total expenses
+- net balance
+- category-wise totals
+- recent activity
+- monthly trends
+
+## Testing
+
+Run tests with:
+
+```bash
+mvn test
+```
+
+## Notes
+
+- Authentication uses HTTP Basic instead of JWT for simplicity.
+- Records currently use hard delete.
+- Rate limiting is not implemented.
+- The backend is the main focus of this submission.
